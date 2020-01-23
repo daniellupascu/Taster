@@ -1,28 +1,20 @@
 import React from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Button,
-  FlatList,
-  TouchableOpacity,
-  Platform
-} from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import { CATEGORIES } from "../data/dummy-data";
-import Colors from "../constants/Colors";
+import CategoryGridItem from "../components/CategoryGridItem";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import CustomHeaderButton from "../components/HeaderButton";
 
 const CategoriesScreen = props => {
   const renderGridItem = ({ item }) => {
     return (
-      <TouchableOpacity
+      <CategoryGridItem
+        title={item.title}
+        color={item.color}
         onPress={() => {
           props.navigation.push("CategoryMeals", { categoryId: item.id });
         }}
-      >
-        <View style={styles.item}>
-          <Text>{item.title}</Text>
-        </View>
-      </TouchableOpacity>
+      />
     );
   };
 
@@ -31,8 +23,19 @@ const CategoriesScreen = props => {
   );
 };
 
-CategoriesScreen.navigationOptions = {
-  headerTitle: "Categories"
+CategoriesScreen.navigationOptions = navigationData => {
+  return {
+    headerTitle: "Menu",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title="Menu"
+          iconName="ios-menu"
+          onPress={() => navigationData.navigation.openDrawer()}
+        />
+      </HeaderButtons>
+    )
+  };
 };
 
 const styles = StyleSheet.create({
@@ -40,11 +43,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
-  },
-  item: {
-    flex: 1,
-    margin: 15,
-    height: 150
   }
 });
 
